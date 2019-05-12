@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fe5336b717cd684bb56887266880b25, type: 3}
+  m_Name: Level Settings
+  m_EditorClassIdentifier: 
+  width: 10
+  height: 15
+  destructibleBlock: {fileID: 3467364238604861743, guid: db72ed6f2d47e094189c241cfd8c0b0c,
+    type: 3}
+  nonDestructibleBlock: {fileID: 4590517035788824863, guid: 5b873540bf8453644a99f19a1dfa4d11,
+    type: 3}
+  player: {fileID: 5146242477215905670, guid: 6264bf5312a2f32488201ab0799112c7, type: 3}
+  emptySpot: {fileID: 4206033426368098281, guid: 890a9629882511b4cbb3de93de8c99c2,
+    type: 3}
