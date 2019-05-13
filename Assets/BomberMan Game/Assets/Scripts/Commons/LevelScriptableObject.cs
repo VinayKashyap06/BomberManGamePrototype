@@ -4,6 +4,7 @@ using UnityEngine;
 using Board;
 using Bomb;
 using Player;
+using Enemy;
 
 namespace Commons
 {
@@ -15,8 +16,12 @@ namespace Commons
         public BlockView destructibleBlock;
         public BlockView nonDestructibleBlock;
         public PlayerView player;
+        public EnemyView enemyPrefab;
         public SpriteRenderer explosion;
         public BombView bombPrefab;
         public int bombLife;
+        public int bombRange;
+        public int enemyCount;
+        
     }
 }

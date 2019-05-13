@@ -3,7 +3,6 @@ using UnityEngine;
 using System.Collections.Generic;
 using GameSystem;
 using Commons;
-using Player;
 
 namespace Board
 {
@@ -14,7 +13,8 @@ namespace Board
         private int width;
         private LevelScriptableObject levelScriptable;
         private Camera cam;
-        private BoardFactory boardFactory;       
+        private BoardFactory boardFactory;
+        private int bombRange;
 
         public BoardController(LevelScriptableObject levelScriptableObject)
         {
@@ -22,87 +22,97 @@ namespace Board
             boardMatrix = new GameObject[levelScriptableObject.height, levelScriptableObject.width];
             height = levelScriptableObject.height;
             width = levelScriptableObject.width;
-            
+            bombRange = levelScriptable.bombRange;
             cam = Camera.main;
             cam.transform.position = new Vector3(width / 2, width/2, -5);
 
-            boardFactory = new BoardFactory(levelScriptable, this);
+            boardFactory = new BoardFactory(levelScriptable);
             boardMatrix = boardFactory.GetBoardMatrix();
             GameService.Instance.OnBombDestroyed += OnBombDestroyed;
         }
 
         private async void OnBombDestroyed(Vector3 position)
         {
-            CheckForDestructibleTiles(position);
             GameObject explosion=GameObject.Instantiate(levelScriptable.explosion.gameObject, position,Quaternion.identity);
+            CheckForDestructibleTiles(position);
             await new WaitForSeconds(1);
             GameObject.Destroy(explosion);
         }
 
         private void CheckForDestructibleTiles(Vector3 position)
         {
-               
+
             int x = Mathf.RoundToInt(position.x);
             int y = Mathf.RoundToInt(position.y);
-            Debug.Log("Bomb position;> x" + x + "y" + y);
+            Debug.Log("Bomb position>>> x" + x + "y" + y);
 
-            //right
-            if (x + 1 < height)
+            DestroyNearbyElements(x, y);
+        }
+
+        private void DestroyNearbyElements(int x, int y)
+        {
+            int iterator = 1;
+            while (iterator <= bombRange)
             {
-                if (IsDestructible(boardMatrix[x + 1, y]))
+                //right
+                if (x + iterator < height)
                 {
+                    if (IsDestructible(boardMatrix[x + iterator, y]))
+                    {
+                        GameObject.Destroy(boardMatrix[x + iterator, y]);
+                        boardMatrix[x + iterator, y] = null;
+                    }
+                    if (IsEnemy(boardMatrix[x + iterator, y]))
+                    {
 
-                    GameObject.Destroy(boardMatrix[x+1, y]);
-                    boardMatrix[x+1, y] = null;
+                    }
                 }
-                if (IsEnemy(boardMatrix[x+1, y]))
+                //left
+                if (x - iterator >= 0)
                 {
+                    if (IsDestructible(boardMatrix[x - iterator, y]))
+                    {
+                        GameObject.Destroy(boardMatrix[x - iterator, y]);
+                        boardMatrix[x - iterator, y] = null;
+                    }
+                    if (IsEnemy(boardMatrix[x - iterator, y]))
+                    {
 
+                    }
                 }
-            }
-            //left
-            if (x - 1 >= 0)
-            {
-                if (IsDestructible(boardMatrix[x - 1, y]))
+                //up
+                if (y + iterator < width)
                 {
-                    GameObject.Destroy(boardMatrix[x-1, y]);
-                    boardMatrix[x-1, y] = null;
-                }
-                if (IsEnemy(boardMatrix[x-1, y]))
-                {
+                    if (IsDestructible(boardMatrix[x, y + iterator]))
+                    {
+                        GameObject.Destroy(boardMatrix[x, y + iterator]);
+                        boardMatrix[x, y + iterator] = null;
+                    }
+                    if (IsEnemy(boardMatrix[x, y + iterator]))
+                    {
 
+                    }
                 }
-            }
-            //up
-            if (y + 1 < width)
-            {
-                if (IsDestructible(boardMatrix[x , y+1]))
+                //down
+                if (y - iterator >= 0)
                 {
-                    GameObject.Destroy(boardMatrix[x, y+1]);
-                    boardMatrix[x, y+1] = null;
-                }
-                if (IsEnemy(boardMatrix[x , y+1]))
-                {
+                    //Debug.Log("checking down");
+                    if (IsDestructible(boardMatrix[x, y - iterator]))
+                    {
+                        GameObject.Destroy(boardMatrix[x, y - iterator]);
+                        boardMatrix[x, y - iterator] = null;
+                    }
+                    if (IsEnemy(boardMatrix[x, y - iterator]))
+                    {
 
+                    }
                 }
-            }
-            //down
-            if (y - 1 >=0)
-            {
-                if (IsDestructible(boardMatrix[x, y-1]))
-                {
 
-                    GameObject.Destroy(boardMatrix[x, y-1]);
-                    boardMatrix[x, y-1] = null;
-                }
-                if (IsEnemy(boardMatrix[x, y-1]))
-                {
-
-                }
+                iterator++;
             }
         }
 
-        private bool IsEnemy(GameObject gameObject)
+        private bool IsEnemy(GameObject enemy)
         {
             return false;
         }
@@ -110,7 +120,7 @@ namespace Board
         private bool IsDestructible(GameObject tile)
         {
             if (tile == null)
-                return false;
+                 return false; 
             if (tile.GetComponent<BlockView>())
                 return tile.GetComponent<BlockView>().isDestructible;
             else

@@ -19,8 +19,12 @@ MonoBehaviour:
   nonDestructibleBlock: {fileID: 4590517035788824863, guid: 5b873540bf8453644a99f19a1dfa4d11,
     type: 3}
   player: {fileID: 5146242477215905670, guid: 6264bf5312a2f32488201ab0799112c7, type: 3}
+  enemyPrefab: {fileID: 3573583267160767826, guid: 5abc6ea9ccf98164888712d0a446dcc2,
+    type: 3}
   explosion: {fileID: 1399200290742999302, guid: 239ef0f20d052e047af9a94ae4e1d7cc,
     type: 3}
   bombPrefab: {fileID: 5458152618596053873, guid: abf50ffed2532f54d814f104bf16ed80,
     type: 3}
   bombLife: 3
+  bombRange: 2
+  enemyCount: 5

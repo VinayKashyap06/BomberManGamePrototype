@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Player;
 using Commons;
 using GameSystem;
+using Enemy;
 using UnityEngine;
 
 namespace Board
@@ -14,16 +15,16 @@ namespace Board
         private int width;
         private GameObject[,] boardMatrix;
         private GameObject board;
-        private BoardController boardController;
-
-        public BoardFactory(LevelScriptableObject levelScriptable, BoardController boardController)
+        private int enemiesSpawned = 0;
+        private int enemyCount;
+        public BoardFactory(LevelScriptableObject levelScriptable)
         {
             this.levelScriptable = levelScriptable;
             height = levelScriptable.height;
             width = levelScriptable.width;
+            enemyCount = levelScriptable.enemyCount;
             boardMatrix = new GameObject[height,width];
             board = new GameObject("Board");
-            this.boardController = boardController;
         }
         
         public GameObject[,] GetBoardMatrix()
@@ -44,8 +45,12 @@ namespace Board
             {
                 for (int j = width - 1; j >= 0; j--)
                 {
-                    if (boardMatrix[i, j] != player)
-                        boardMatrix[i, j] = SpawnSingleTile(i, j);
+                    if (j % 2 == 0 && i%2==0)
+                        boardMatrix[i, j]=SpawnSingleTile(i, j,true);
+
+                    if (boardMatrix[i, j] != player && boardMatrix[i,j]==null)
+                        boardMatrix[i, j] = SpawnSingleTile(i, j,false);
+
                 }
             }
 
@@ -60,25 +65,36 @@ namespace Board
 
             SpawnBounds();
         }
-        private GameObject SpawnSingleTile(int x, int y)
+        private GameObject SpawnSingleTile(int x, int y,bool spawnNonDestructible)
         {
             int rand = UnityEngine.Random.Range(0, 100);
             GameObject obj=null;
-           
-            if (rand > 70)
-            {
-                obj = GameObject.Instantiate(levelScriptable.nonDestructibleBlock.gameObject) as GameObject;
-                obj.name = "(" + x + "," + y + ")";
-                obj.transform.position = new Vector3(x, y, 0);
-                obj.transform.SetParent(board.transform);
-            }
-            else if (rand > 30 && rand <= 70)
+          
+            if (rand >= 50)
             {
                 obj = GameObject.Instantiate(levelScriptable.destructibleBlock.gameObject) as GameObject;
                 obj.name = "(" + x + "," + y + ")";
                 obj.transform.position = new Vector3(x, y, 0);
                 obj.transform.SetParent(board.transform);
-            } 
+            }
+            else
+            {
+                if (enemiesSpawned <= enemyCount)
+                {
+                    obj = GameObject.Instantiate(levelScriptable.enemyPrefab.gameObject) as GameObject;
+                    obj.transform.position = new Vector3(x, y, 0);
+                    obj.transform.SetParent(board.transform);
+                    enemiesSpawned++;
+                }
+            }
+            if (spawnNonDestructible && obj==null)
+            {
+                obj = GameObject.Instantiate(levelScriptable.nonDestructibleBlock.gameObject) as GameObject;
+                obj.name = "(" + x + "," + y + ")";
+                obj.transform.position = new Vector3(x, y, 0);
+                obj.transform.SetParent(board.transform);                
+            }
+
             return obj;
         }
 
