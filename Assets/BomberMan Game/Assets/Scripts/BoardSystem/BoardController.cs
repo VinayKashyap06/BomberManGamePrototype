@@ -34,6 +34,7 @@ namespace Board
 
         private async void OnBombDestroyed(Vector3 position)
         {
+            Debug.Log("Bomb position>>>"+position);
             GameObject explosion=GameObject.Instantiate(levelScriptable.explosion.gameObject, position,Quaternion.identity);
             CheckForDestructibleTiles(position);
             await new WaitForSeconds(1);
@@ -42,18 +43,14 @@ namespace Board
 
         private void CheckForDestructibleTiles(Vector3 position)
         {
-
             int x = Mathf.RoundToInt(position.x);
             int y = Mathf.RoundToInt(position.y);
-            Debug.Log("Bomb position>>> x" + x + "y" + y);
-
             DestroyNearbyElements(x, y);
         }
 
         private void DestroyNearbyElements(int x, int y)
         {
             int iterator = 1;
-
             while (iterator <= bombRange)
             {
                 //right

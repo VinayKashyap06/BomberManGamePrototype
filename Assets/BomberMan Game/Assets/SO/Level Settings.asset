@@ -26,5 +26,5 @@ MonoBehaviour:
   bombPrefab: {fileID: 5458152618596053873, guid: abf50ffed2532f54d814f104bf16ed80,
     type: 3}
   bombLife: 3
-  bombRange: 2
+  bombRange: 1
   enemyCount: 5

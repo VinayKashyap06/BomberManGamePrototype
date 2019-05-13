@@ -5,6 +5,7 @@ using Commons;
 using Board;
 using Player;
 using Bomb;
+using UISystem;
 
 namespace GameSystem
 {
@@ -14,14 +15,19 @@ namespace GameSystem
         private BoardController boardController;
         private  PlayerController playerController;
         private BombController bombController;
+        private UIService uIService;
+
         public Action<Vector3> OnBombDestroyed;
         public Action OnEnemyKilled;
+        public Action OnPlayerKilled;
         protected override void OnInitialize()
         {
             base.OnInitialize();
             playerController = new PlayerController();
             boardController = new BoardController(levelScriptableObject);
             bombController = new BombController(levelScriptableObject.bombPrefab,levelScriptableObject.bombLife);
+            uIService = new UIService();
+            uIService.OnStart();
         }
         private void FixedUpdate()
         {
@@ -32,7 +38,6 @@ namespace GameSystem
         {
             playerController.SetPlayerViewReference(playerView);
         }
-
         public void SpawnBomb(Vector3 position)
         {
             bombController.SpawnBomb(position);
@@ -44,6 +49,10 @@ namespace GameSystem
         public void InvokeEnemyKilled()
         {
             OnEnemyKilled?.Invoke();
+        }
+        public void InvokePlayerKilled()
+        {
+            OnPlayerKilled?.Invoke();
         }
     }
 }
