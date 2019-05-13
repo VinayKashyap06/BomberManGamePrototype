@@ -15,6 +15,7 @@ namespace GameSystem
         private  PlayerController playerController;
         private BombController bombController;
         public Action<Vector3> OnBombDestroyed;
+        public Action OnEnemyKilled;
         protected override void OnInitialize()
         {
             base.OnInitialize();
@@ -39,6 +40,10 @@ namespace GameSystem
         public void InvokeBombDestroyed(Vector3 position)
         {
             OnBombDestroyed?.Invoke(position);
+        }
+        public void InvokeEnemyKilled()
+        {
+            OnEnemyKilled?.Invoke();
         }
     }
 }

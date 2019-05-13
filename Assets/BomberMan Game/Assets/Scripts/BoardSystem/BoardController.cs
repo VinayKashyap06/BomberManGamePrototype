@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using GameSystem;
+using Enemy;
 using Commons;
 
 namespace Board
@@ -52,69 +53,61 @@ namespace Board
         private void DestroyNearbyElements(int x, int y)
         {
             int iterator = 1;
+
             while (iterator <= bombRange)
             {
                 //right
                 if (x + iterator < height)
                 {
-                    if (IsDestructible(boardMatrix[x + iterator, y]))
+                    if (IsDestructible(boardMatrix[x + iterator, y])|| IsEnemy(boardMatrix[x + iterator, y]))
                     {
                         GameObject.Destroy(boardMatrix[x + iterator, y]);
                         boardMatrix[x + iterator, y] = null;
-                    }
-                    if (IsEnemy(boardMatrix[x + iterator, y]))
-                    {
-
                     }
                 }
                 //left
                 if (x - iterator >= 0)
                 {
-                    if (IsDestructible(boardMatrix[x - iterator, y]))
+                    if (IsDestructible(boardMatrix[x - iterator, y])|| IsEnemy(boardMatrix[x - iterator, y]))
                     {
                         GameObject.Destroy(boardMatrix[x - iterator, y]);
                         boardMatrix[x - iterator, y] = null;
-                    }
-                    if (IsEnemy(boardMatrix[x - iterator, y]))
-                    {
-
-                    }
+                    }                    
                 }
                 //up
                 if (y + iterator < width)
                 {
-                    if (IsDestructible(boardMatrix[x, y + iterator]))
+                    if (IsDestructible(boardMatrix[x, y + iterator])|| IsEnemy(boardMatrix[x, y + iterator]))
                     {
                         GameObject.Destroy(boardMatrix[x, y + iterator]);
                         boardMatrix[x, y + iterator] = null;
-                    }
-                    if (IsEnemy(boardMatrix[x, y + iterator]))
-                    {
-
-                    }
+                    }            
                 }
                 //down
                 if (y - iterator >= 0)
                 {
                     //Debug.Log("checking down");
-                    if (IsDestructible(boardMatrix[x, y - iterator]))
+                    if (IsDestructible(boardMatrix[x, y - iterator]) || IsEnemy(boardMatrix[x, y - iterator]))
                     {
                         GameObject.Destroy(boardMatrix[x, y - iterator]);
-                        boardMatrix[x, y - iterator] = null;
-                    }
-                    if (IsEnemy(boardMatrix[x, y - iterator]))
-                    {
-
+                        boardMatrix[x, y - iterator] = null;                    
                     }
                 }
-
                 iterator++;
             }
         }
 
         private bool IsEnemy(GameObject enemy)
         {
-            return false;
+            if (enemy == null)
+                return false;
+            if (enemy.GetComponent<EnemyView>())
+            {
+                GameService.Instance.InvokeEnemyKilled();
+                return true;
+            }
+            else
+                return false;
         }
 
         private bool IsDestructible(GameObject tile)

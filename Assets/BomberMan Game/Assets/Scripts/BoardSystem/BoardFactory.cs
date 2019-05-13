@@ -53,7 +53,6 @@ namespace Board
 
                 }
             }
-
             //Mandatory empty spots
             if (boardMatrix[0, width - 2] != null)
                 GameObject.Destroy(boardMatrix[0, width - 2]);
