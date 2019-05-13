@@ -1,7 +1,9 @@
 ﻿using System;
 using UnityEngine;
 using System.Collections.Generic;
+using GameSystem;
 using Commons;
+using Player;
 
 namespace Board
 {
@@ -12,46 +14,107 @@ namespace Board
         private int width;
         private LevelScriptableObject levelScriptable;
         private Camera cam;
+        private BoardFactory boardFactory;       
+
         public BoardController(LevelScriptableObject levelScriptableObject)
         {
             this.levelScriptable = levelScriptableObject;
             boardMatrix = new GameObject[levelScriptableObject.height, levelScriptableObject.width];
             height = levelScriptableObject.height;
             width = levelScriptableObject.width;
-            cam = Camera.main;
-            cam.transform.position = new Vector3(width / 2, height / 2, -5);
-            SpawnBoard();
-
-        }
-        private void SpawnBoard()
-        {
-            GameObject playerParent = new GameObject();
-            playerParent.name = "Player Parent";
-            playerParent.transform.position = new Vector3(0, width - 1, 0);
-            boardMatrix[0, width - 1] = playerParent;
-            GameObject player= GameObject.Instantiate(levelScriptable.player.gameObject) as GameObject;
-            player.transform.SetParent(playerParent.transform);
-            player.transform.localPosition = Vector3.zero;
             
+            cam = Camera.main;
+            cam.transform.position = new Vector3(width / 2, width/2, -5);
 
-            for (int i = height-1; i>=0; i--)
+            boardFactory = new BoardFactory(levelScriptable, this);
+            boardMatrix = boardFactory.GetBoardMatrix();
+            GameService.Instance.OnBombDestroyed += OnBombDestroyed;
+        }
+
+        private async void OnBombDestroyed(Vector3 position)
+        {
+            CheckForDestructibleTiles(position);
+            GameObject explosion=GameObject.Instantiate(levelScriptable.explosion.gameObject, position,Quaternion.identity);
+            await new WaitForSeconds(1);
+            GameObject.Destroy(explosion);
+        }
+
+        private void CheckForDestructibleTiles(Vector3 position)
+        {
+               
+            int x = Mathf.RoundToInt(position.x);
+            int y = Mathf.RoundToInt(position.y);
+            Debug.Log("Bomb position;> x" + x + "y" + y);
+
+            //right
+            if (x + 1 < height)
             {
-                for (int j = width-1; j >=0; j--)
+                if (IsDestructible(boardMatrix[x + 1, y]))
                 {
-                    if (boardMatrix[i, j] == null)
-                        boardMatrix[i, j] = SpawnSingleTile(i,j);
+
+                    GameObject.Destroy(boardMatrix[x+1, y]);
+                    boardMatrix[x+1, y] = null;
+                }
+                if (IsEnemy(boardMatrix[x+1, y]))
+                {
+
+                }
+            }
+            //left
+            if (x - 1 >= 0)
+            {
+                if (IsDestructible(boardMatrix[x - 1, y]))
+                {
+                    GameObject.Destroy(boardMatrix[x-1, y]);
+                    boardMatrix[x-1, y] = null;
+                }
+                if (IsEnemy(boardMatrix[x-1, y]))
+                {
+
+                }
+            }
+            //up
+            if (y + 1 < width)
+            {
+                if (IsDestructible(boardMatrix[x , y+1]))
+                {
+                    GameObject.Destroy(boardMatrix[x, y+1]);
+                    boardMatrix[x, y+1] = null;
+                }
+                if (IsEnemy(boardMatrix[x , y+1]))
+                {
+
+                }
+            }
+            //down
+            if (y - 1 >=0)
+            {
+                if (IsDestructible(boardMatrix[x, y-1]))
+                {
+
+                    GameObject.Destroy(boardMatrix[x, y-1]);
+                    boardMatrix[x, y-1] = null;
+                }
+                if (IsEnemy(boardMatrix[x, y-1]))
+                {
+
                 }
             }
         }
-        private GameObject SpawnSingleTile(int x, int y)
+
+        private bool IsEnemy(GameObject gameObject)
         {
-            int rand = UnityEngine.Random.Range(0, 100);
-            GameObject parentObj = new GameObject();
-            parentObj.name = "("+x+","+y+")";
-            parentObj.transform.position = new Vector3(x, y, 0);
+            return false;
+        }
 
-
-            return parentObj;
+        private bool IsDestructible(GameObject tile)
+        {
+            if (tile == null)
+                return false;
+            if (tile.GetComponent<BlockView>())
+                return tile.GetComponent<BlockView>().isDestructible;
+            else
+                return false;
         }
     }
 }

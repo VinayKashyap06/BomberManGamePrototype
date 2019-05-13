@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Board;
+using Bomb;
 using Player;
 
 namespace Commons
@@ -14,6 +15,8 @@ namespace Commons
         public BlockView destructibleBlock;
         public BlockView nonDestructibleBlock;
         public PlayerView player;
-        public SpriteRenderer emptySpot;
+        public SpriteRenderer explosion;
+        public BombView bombPrefab;
+        public int bombLife;
     }
 }
