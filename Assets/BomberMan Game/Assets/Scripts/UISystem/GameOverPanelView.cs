@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-using UnityEngine.SceneManagement;
+using GameSystem;
 using UnityEngine.UI;
 using TMPro;
 
@@ -18,9 +18,16 @@ namespace UISystem
         private void Start()
         {
             exitButton.onClick.AddListener(() => Application.Quit());
-            restartButton.onClick.AddListener(() => SceneManager.LoadScene(0));
+            restartButton.onClick.AddListener(OnRestartButton);
             
         }
+
+        private void OnRestartButton()
+        {
+            Time.timeScale = 1f;
+            GameService.Instance.InvokeGameReset();
+        }
+
         public void SetMessage(string message)
         {
             messageText.text = message;

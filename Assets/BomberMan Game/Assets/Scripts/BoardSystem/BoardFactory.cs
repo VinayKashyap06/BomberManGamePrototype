@@ -27,12 +27,13 @@ namespace Board
             board = new GameObject("Board");
         }
         
-        public GameObject[,] GetBoardMatrix()
+        public GameObject[,] GetBoardMatrix(bool spawnBounds)
         {
-            SpawnBoard();
+            SpawnBoard(spawnBounds);
+            enemiesSpawned = 0;
             return boardMatrix;
         }
-        private void SpawnBoard()
+        private void SpawnBoard(bool spawnBounds)
         {
             //player parent            
             GameObject player = GameObject.Instantiate(levelScriptable.player.gameObject) as GameObject;
@@ -61,8 +62,8 @@ namespace Board
 
             boardMatrix[0, width - 2] = null;
             boardMatrix[1, width - 1] = null;
-
-            SpawnBounds();
+            if(spawnBounds)
+                SpawnBounds();
         }
         private GameObject SpawnSingleTile(int x, int y,bool spawnNonDestructible)
         {
@@ -78,12 +79,13 @@ namespace Board
             }
             else
             {
-                if (enemiesSpawned <= enemyCount)
+                if (enemiesSpawned < enemyCount)
                 {
                     obj = GameObject.Instantiate(levelScriptable.enemyPrefab.gameObject) as GameObject;
                     obj.transform.position = new Vector3(x, y, 0);
                     obj.transform.SetParent(board.transform);
                     enemiesSpawned++;
+                    GameService.Instance.AddEnemyToList(obj.GetComponent<EnemyView>());
                 }
             }
             if (spawnNonDestructible && obj==null)

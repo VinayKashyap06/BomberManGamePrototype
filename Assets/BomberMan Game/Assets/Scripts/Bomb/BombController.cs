@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using GameSystem;
 using UnityEngine;
 
 namespace Bomb
@@ -20,8 +21,10 @@ namespace Bomb
                 return;
             else
             {
-                GameObject bomb = GameObject.Instantiate(bombPrefab.gameObject,position,Quaternion.identity);
+                Vector3 pos = new Vector3(Mathf.RoundToInt(position.x), Mathf.RoundToInt(position.y), position.z);
+                GameObject bomb = GameObject.Instantiate(bombPrefab.gameObject,pos,Quaternion.identity);
                 bombView = bomb.GetComponent<BombView>();
+                GameService.Instance.AddBombToMatrix((int)pos.x, (int)pos.y, bomb);
                 await new WaitForSeconds(bombLife);
                 bombView = null;
                 GameObject.Destroy(bomb);

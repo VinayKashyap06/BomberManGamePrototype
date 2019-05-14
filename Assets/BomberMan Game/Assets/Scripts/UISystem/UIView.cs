@@ -25,6 +25,13 @@ namespace UISystem
             gameOverPanel.gameObject.SetActive(true);
         }
 
+        public void ResetUI()
+        {
+            gameOverPanel.gameObject.SetActive(false);
+            score = 0;
+            scoreText.text = "Score : 0";
+        }
+
         public void UpdateScore()
         {
             score += 10;

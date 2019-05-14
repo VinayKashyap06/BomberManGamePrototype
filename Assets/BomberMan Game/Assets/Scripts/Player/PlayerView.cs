@@ -12,6 +12,7 @@ namespace Player
         private Animator playerAnimator;
         private Transform playerParent;
         private Rigidbody2D rb;
+        private float speed=5f;
         private void Start()
         {
             if (playerAnimator == null)
@@ -25,23 +26,23 @@ namespace Player
         {
             playerAnimator.SetBool("isIdle", false);
             playerAnimator.SetFloat("xDirection",-1);
-            rb.velocity = new Vector3(-1, 0, 0) * 2f;
+            rb.velocity = new Vector3(-1, 0, 0) * speed;
         }
         public void MoveRight()
         {
             playerAnimator.SetBool("isIdle", false);
             playerAnimator.SetFloat("xDirection",1);
-            rb.velocity = new Vector3(1, 0, 0) * 2f;
+            rb.velocity = new Vector3(1, 0, 0) * speed;
         }
         public void MoveUp()
         {
-            rb.velocity = new Vector3(0, 1, 0) * 2f;
+            rb.velocity = new Vector3(0, 1, 0) * speed;
             playerAnimator.SetBool("isIdle", false);
             playerAnimator.SetFloat("yDirection", 1);
         }
         public void MoveDown()
         {
-            rb.velocity = new Vector3(0, -1, 0) * 2f;
+            rb.velocity = new Vector3(0, -1, 0) * speed;
             playerAnimator.SetBool("isIdle", false);
             playerAnimator.SetFloat("yDirection", -1);
         }
@@ -52,6 +53,11 @@ namespace Player
             playerAnimator.SetBool("isIdle", true);
             playerAnimator.SetFloat("xDirection", 0);
             playerAnimator.SetFloat("yDirection", 0);
+        }
+
+        public void DestroyView()
+        {
+            Destroy(this.gameObject);
         }
     }
 }

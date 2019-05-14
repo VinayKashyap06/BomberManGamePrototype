@@ -11,6 +11,17 @@ namespace Player
         float y;
         private PlayerView playerView;       
 
+        public PlayerController()
+        {
+            GameService.Instance.OnPlayerKilled += OnPlayerKilled;
+        }
+
+        private void OnPlayerKilled()
+        {
+            playerView.DestroyView();
+            playerView = null;
+        }
+
         public void OnTick()
         {
             if (playerView == null)
@@ -48,6 +59,13 @@ namespace Player
         public void SetPlayerViewReference(PlayerView playerView)
         {
             this.playerView = playerView;
-        }       
+        }
+
+        public bool IsPlayerPresent(int x, int y)
+        {
+            if (playerView == null)
+                return false;
+            return (Mathf.RoundToInt(playerView.transform.position.x) == x) && (Mathf.RoundToInt(playerView.transform.position.y) == y);
+        }
     }
 }
