@@ -18,7 +18,8 @@ namespace Player
 
         private void OnPlayerKilled()
         {
-            playerView.DestroyView();
+            if(playerView!=null)
+                playerView.DestroyView();
             playerView = null;
         }
 
