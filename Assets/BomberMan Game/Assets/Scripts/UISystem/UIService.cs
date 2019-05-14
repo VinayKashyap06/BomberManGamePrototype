@@ -31,6 +31,7 @@ namespace UISystem
 
         private void OnPlayerLost()
         {
+            Time.timeScale = 0;
             uIView.ShowGameOverScreen("You Lost");
         }
 

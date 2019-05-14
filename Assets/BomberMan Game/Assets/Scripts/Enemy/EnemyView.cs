@@ -2,6 +2,7 @@
 using System.Collections;
 using System;
 using GameSystem;
+using Player;
 
 namespace Enemy
 {
@@ -23,7 +24,15 @@ namespace Enemy
                 newPosition = GameService.Instance.FindNewPosition(this.transform.position,this.gameObject);
                 //Debug.Log("new new position" + newPosition);
             }
-        }       
-       
+        }
+
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            if (collision.GetComponent<PlayerView>())
+            {
+                GameService.Instance.InvokePlayerKilled();
+            }
+        }
+
     }
 }

@@ -47,7 +47,6 @@ namespace Board
             boardMatrix = null;            
             boardMatrix = boardFactory.GetBoardMatrix(false);
         }
-
         public Vector3 GetNewPosition(Vector3 position, GameObject enemy)
         {
             Vector3 newPos = position;
@@ -103,7 +102,7 @@ namespace Board
             {
                 int rand = UnityEngine.Random.Range(0, possiblePositions.Count);
                 newPos = possiblePositions[rand];
-                Debug.Log("new possiblePosition for enemy" + newPos, boardMatrix[x, y]);
+                //Debug.Log("new possiblePosition for enemy" + newPos, boardMatrix[x, y]);
                 boardMatrix[x, y] = null;
                 boardMatrix[(int)newPos.x, (int)newPos.y] = enemy;
             }
@@ -115,24 +114,21 @@ namespace Board
             boardMatrix[x, y] = bomb;
             positionToIgnore = new Vector3(x, y, 0);
         }
-
         private bool IsEnemyMovable(GameObject boardValue)
         {
             return (boardValue == null || boardValue.GetComponent<EnemyView>());
         }
-
         private async void OnBombDestroyed(Vector3 position)
         {
             Debug.Log("Bomb position>>>" + position);
             GameObject explosion = GameObject.Instantiate(levelScriptable.explosion.gameObject, position, Quaternion.identity);
             boardMatrix[(int)position.x, (int)position.y] = explosion;
             CheckForDestructibleTiles(position);
-            await new WaitForSeconds(1);
+            await new WaitForSeconds(0.2f);
             GameObject.Destroy(explosion);
             boardMatrix[(int)position.x, (int)position.y] = null;
             positionToIgnore = new Vector3(-1, -1, -1);
         }
-
         private void CheckForDestructibleTiles(Vector3 position)
         {
             int x = (int)position.x;
@@ -200,12 +196,10 @@ namespace Board
                 iterator++;
             }
         }
-
         private bool IsPlayerPresent(int x, int y)
         {
             return GameService.Instance.IsPlayerPresent(x, y);
         }
-
         private bool IsEnemy(GameObject enemy)
         {
             if (enemy == null)
