@@ -1,15 +1,15 @@
 # BomberManGamePrototype
 Popular 2D Bomber man game
 
---Architectutre/ Patterns Used
+-Architectutre/ Patterns Used
 -MVC
 -Singleton Pattern
 -Factory Pattern
 
---Data
+-Data
 -Scriptable Object is used for custom data.
 
---Features/Game play:
+-Features/Game play:
 -Map spawns in a 2D Array
 -Bounds spawns with Map
 -Map has random destrucible tiles
@@ -24,7 +24,7 @@ Popular 2D Bomber man game
 -Enemy AI gets random direction
 -Player Animations are used via Animator
 
---Improvements
+-Improvements
 -Implement lives
 -Implement multiple kills, currently single enemy gets killed if same enemies in the same cell
 -Implement multiple levels
