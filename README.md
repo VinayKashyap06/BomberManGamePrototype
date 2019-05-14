@@ -1,31 +1,31 @@
 # BomberManGamePrototype
-Popular 2D Bomber man game
+Clone of Popular 2D Bomber man game.<br>
 
--Architectutre/ Patterns Used
--MVC
--Singleton Pattern
--Factory Pattern
+-Architectutre/ Patterns Used:<br>
+MVC.<br>
+Singleton Pattern.<br>
+Factory Pattern.<br>
 
--Data
--Scriptable Object is used for custom data.
+-Data:<br>
+Scriptable Object is used for custom data.</br>
 
--Features/Game play:
--Map spawns in a 2D Array
--Bounds spawns with Map
--Map has random destrucible tiles
--Enemies position is random as well
--Player spawns at top left corner
--Player has ability to spawn bombs using Space bar, One at a time
--Player can move over bombs, enemies cannot
--Player wins after killing all enemies
--Player dies if he comes in contact with bomb
--Player dies if he comes in contact with enemy
--Can Restart Game as many times as you want
--Enemy AI gets random direction
--Player Animations are used via Animator
+-Features/Game play:</br>
+Map spawns in a 2D Array.</br>
+Bounds spawns with Map.</br>
+Map has random destrucible tiles.</br>
+Enemies position is random as well.</br>
+Player spawns at top left corner.</br>
+Player has ability to spawn bombs using Space bar, One at a time.</br>
+Player can move over bombs, enemies cannot.</br>
+Player wins after killing all enemies.</br>
+Player dies if he comes in contact with bomb.</br>
+Player dies if he comes in contact with enemy.</br>
+Can Restart Game as many times as you want.</br>
+Enemy AI gets random direction.</br>
+Player Animations are used via Animator.</br>
 
--Improvements
--Implement lives
--Implement multiple kills, currently single enemy gets killed if same enemies in the same cell
--Implement multiple levels
--Implement multiple types of enemy
+-Improvements:</br>
+Implement lives.</br>
+Implement multiple kills, currently single enemy gets killed if same enemies in the same cell.</br>
+Implement multiple levels.<br>
+Implement multiple types of enemy.<br>
